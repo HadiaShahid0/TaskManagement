@@ -1,102 +1,30 @@
+# Dependencies
 node_modules/
+
+# Environment variables
 .env
 .env.*
+!.env.example
+
+# Logs
+logs/
 *.log
-node_modules/
-SHELL=/bin/bash
-SESSION_MANAGER=local/as-HP-ProBook-450-G5:@/tmp/.ICE-unix/1759,unix/as-HP-ProBook-450-G5:/tmp/.ICE-unix/1759
-QT_ACCESSIBILITY=1
-COLORTERM=truecolor
-XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
-SSH_AGENT_LAUNCHER=gnome-keyring
-NVM_INC=/home/as/.nvm/versions/node/v24.18.0/include/node
-XDG_MENU_PREFIX=gnome-
-TERM_PROGRAM_VERSION=1.128.0
-XDG_CONFIG_DIRS_VSCODE_SNAP_ORIG=/etc/xdg/xdg-ubuntu:/etc/xdg
-GNOME_DESKTOP_SESSION_ID=this-is-deprecated
-COPILOT_DEBUG_NONCE=6e1fbefb9f72da1cdf01313bc9d45e8e
-GDK_BACKEND_VSCODE_SNAP_ORIG=
-FONTCONFIG_PATH=/etc/fonts
-LC_ADDRESS=ur_PK
-GNOME_SHELL_SESSION_MODE=ubuntu
-GIO_MODULE_DIR_VSCODE_SNAP_ORIG=
-LC_NAME=ur_PK
-SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
-XDG_DATA_HOME=/home/as/snap/code/249/.local/share
-XMODIFIERS=@im=ibus
-DESKTOP_SESSION=ubuntu
-LC_MONETARY=ur_PK
-NO_AT_BRIDGE=1
-GTK_MODULES=gail:atk-bridge
-DBUS_STARTER_BUS_TYPE=session
-PWD=/media/as/New Volume/MERN/Internship/Week-01/Day-1/Project/CRUD/server
-GSETTINGS_SCHEMA_DIR=/home/as/snap/code/249/.local/share/glib-2.0/schemas
-XDG_SESSION_DESKTOP=ubuntu
-LOGNAME=as
-GTK_EXE_PREFIX=/snap/code/249/usr
-XDG_SESSION_TYPE=wayland
-SYSTEMD_EXEC_PID=1759
-XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.12FDT3
-VSCODE_GIT_ASKPASS_NODE=/snap/code/249/usr/share/code/code
-IM_CONFIG_CHECK_ENV=1
-GJS_DEBUG_TOPICS=JS ERROR;JS LOG
-HOME=/home/as
-USERNAME=as
-IM_CONFIG_PHASE=1
-LC_PAPER=ur_PK
-LANG=en_US.UTF-8
-LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
-XDG_CURRENT_DESKTOP=ubuntu:GNOME
-WAYLAND_DISPLAY=wayland-0
-GIT_ASKPASS=/snap/code/249/usr/share/code/resources/app/extensions/git/dist/askpass.sh
-INVOCATION_ID=9bbb00dc37ff48ee996ae618786bdf8c
-MANAGERPID=1605
-CHROME_DESKTOP=code.desktop
-GJS_DEBUG_OUTPUT=stderr
-NVM_DIR=/home/as/.nvm
-VSCODE_GIT_ASKPASS_EXTRA_ARGS=
-GNOME_SETUP_DISPLAY=:1
-VSCODE_PYTHON_AUTOACTIVATE_GUARD=1
-GSETTINGS_SCHEMA_DIR_VSCODE_SNAP_ORIG=
-GTK_IM_MODULE_FILE_VSCODE_SNAP_ORIG=
-LESSCLOSE=/usr/bin/lesspipe %s %s
-XDG_SESSION_CLASS=user
-TERM=xterm-256color
-LC_IDENTIFICATION=ur_PK
-GTK_PATH=/snap/code/249/usr/lib/x86_64-linux-gnu/gtk-3.0
-LESSOPEN=| /usr/bin/lesspipe %s
-USER=as
-GTK_PATH_VSCODE_SNAP_ORIG=
-VSCODE_GIT_IPC_HANDLE=/run/user/1000/vscode-git-3a1c3ed1aa.sock
-DISPLAY=:0
-SHLVL=1
-NVM_CD_FLAGS=
-LOCPATH=/snap/code/249/usr/lib/locale
-LC_TELEPHONE=ur_PK
-QT_IM_MODULE=ibus
-XDG_DATA_HOME_VSCODE_SNAP_ORIG=
-LC_MEASUREMENT=ur_PK
-GTK_EXE_PREFIX_VSCODE_SNAP_ORIG=
-DBUS_STARTER_ADDRESS=unix:path=/run/user/1000/bus,guid=24da1b62bc30e4365d9cc48f6a606ccf
-FC_FONTATIONS=1
-XDG_RUNTIME_DIR=/run/user/1000
-XDG_DATA_DIRS_VSCODE_SNAP_ORIG=/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
-LC_TIME=ur_PK
-FONTCONFIG_FILE=/etc/fonts/fonts.conf
-VSCODE_GIT_ASKPASS_MAIN=/snap/code/249/usr/share/code/resources/app/extensions/git/dist/askpass-main.js
-JOURNAL_STREAM=8:14610
-XDG_DATA_DIRS=/home/as/snap/code/249/.local/share:/home/as/snap/code/249:/snap/code/249/usr/share:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
-GDK_BACKEND=x11
-PATH=/home/as/.nvm/versions/node/v24.18.0/bin:/home/as/.config/Code/User/globalStorage/github.copilot-chat/debugCommand:/home/as/.config/Code/User/globalStorage/github.copilot-chat/copilotCli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
-GDMSESSION=ubuntu
-GTK_IM_MODULE_FILE=/home/as/snap/code/common/.cache/immodules/immodules.cache
-DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus,guid=24da1b62bc30e4365d9cc48f6a606ccf
-NVM_BIN=/home/as/.nvm/versions/node/v24.18.0/bin
-LOCPATH_VSCODE_SNAP_ORIG=
-GIO_MODULE_DIR=/home/as/snap/code/common/.cache/gio-modules
-GIO_LAUNCHED_DESKTOP_FILE_PID=6748
-GIO_LAUNCHED_DESKTOP_FILE=/var/lib/snapd/desktop/applications/code_code.desktop
-LC_NUMERIC=ur_PK
-TERM_PROGRAM=vscode
-_=/usr/bin/env
-OLDPWD=/media/as/New Volume/MERN/Internship/Week-01/Day-1/Project/CRUD
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build folders
+dist/
+build/
+
+# Coverage
+coverage/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
