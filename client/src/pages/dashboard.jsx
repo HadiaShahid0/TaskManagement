@@ -16,7 +16,7 @@ const Dashboard = () => {
             <StatsCard title="Total Tasks" value={stats.total} />
           </div>
           <div className="col-md-4">
-            <StatsCard title="Completed" value={stats.completed} />
+            <StatsCard title="Completed" value={stats.completed}/>
           </div>
           <div className="col-md-4">
             <StatsCard title="Pending" value={stats.pending} />

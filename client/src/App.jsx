@@ -1,12 +1,11 @@
 import TaskRoutes from "./routes/taskRoutes.jsx";
 
-const App=()=> {
-
+const App = () => {
   return (
     <>
       <TaskRoutes />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;

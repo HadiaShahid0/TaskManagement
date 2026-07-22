@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import Task from "../pages/Task.jsx";
+import Task from "../pages/task.jsx";
 import Dashboard from "../pages/dashboard.jsx";
 const TaskRoutes = () => {
   return (

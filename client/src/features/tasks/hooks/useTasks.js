@@ -1,35 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import taskApi from "../services/taskApi";
+
 const useTasks = () => {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Learn React",
-      description: "Practice hooks",
-      status: false,
-    },
-  ]);
-
-  const addTask = (task) => {
-    const newTask = {
-      id: Date.now(),
-      ...task,
+  const [tasks, setTasks] = useState([]);
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await taskApi.getTasks();
+        setTasks(response.data);
+      } catch (error) {
+        console.error("Error fetching task:", error);
+      }
     };
-    setTasks((prev) => [...prev, newTask]);
+
+    fetchTasks();
+  }, []);
+
+  const addTask = async (taskData) => {
+    try {
+      const newTask = await taskApi.createTask(taskData);
+      setTasks((prevTasks) => [...prevTasks, newTask.data]);
+    } catch (error) {
+      console.error("Error adding task:", error);
+    }
   };
 
-  const updateTask = (task) => {
-    setTasks((prev) => prev.map((item) => (item.id === task.id ? task : item)));
+  const updateTaskById = async (taskId, updatedData) => {
+    try {
+      const updatedTask = await taskApi.updateTask(taskId, updatedData);
+      setTasks((prevTasks) =>
+        prevTasks.map((task) => (task._id === taskId ? updatedTask.data : task)),
+      );
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
   };
 
-  const removeTask = (id) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+  const deleteTaskById = async (taskId) => {
+    try {
+      await taskApi.deleteTask(taskId);
+      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
   };
 
-  return {
-    tasks,
-    addTask,
-    updateTask,
-    removeTask,
-  };
+  return { tasks, addTask, updateTaskById, deleteTaskById };
 };
+
 export default useTasks;

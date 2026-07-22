@@ -7,22 +7,24 @@ const TaskList = ({ tasks, onEdit, onDelete, showActions = true }) => {
         <thead>
           <tr>
             <th>Title</th>
-            <th>Status</th>
+            <th>Description</th>
             <th>Status</th>
             {showActions && <th>Actions</th>}
           </tr>
         </thead>
 
         <tbody>
-          {tasks.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              showActions={showActions}
-            />
-          ))}
+          {tasks.map((task) => {
+            return (
+              <TaskItem
+                key={task._id}
+                task={task}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                showActions={showActions}
+              />
+            );
+          })}
         </tbody>
       </table>
     </div>
