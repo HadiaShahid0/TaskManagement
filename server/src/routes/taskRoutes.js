@@ -1,6 +1,6 @@
 import express from 'express';
 import taskController from '../controllers/taskControllers/taskController.js';
-import validateTask from '../middleware/taskValidation.js/validateTask.js';
+import validateTask from '../middleware/taskValidation/validateTask.js';
 const taskRoutes = express.Router();
 
 taskRoutes.post('/add', validateTask.validateCreateTask, taskController.addTask);

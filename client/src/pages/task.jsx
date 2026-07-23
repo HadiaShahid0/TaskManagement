@@ -14,6 +14,7 @@ const Tasks = () => {
       ...task,
       status: task.status.toString(),
     };
+    
     setEditingTask(edittask);
   };
 
