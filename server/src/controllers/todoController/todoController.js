@@ -7,7 +7,8 @@ const addTodoTask = async (req, res) => {
         const newTask = await ToDoServices.addToDoTaskService({
             title,
             description,
-            status
+            status,
+            user: req.user._id
         });
 
         Response.successResponse(
@@ -36,7 +37,7 @@ const deleteTodoTask = async (req, res) => {
 
 const readTodoTasks = async (req, res) => {
     try{
-        const tasks = await ToDoServices.getAllToDoTasksService();
+        const tasks = await ToDoServices.getAllToDoTasksService(req.user._id);
         Response.successResponse(res, "Todo Tasks retrieved successfully", tasks);
     } catch (error) {
         Response.errorResponse(res, error.message);

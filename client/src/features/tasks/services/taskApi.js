@@ -1,11 +1,12 @@
-
+import BASE_URL from "../../../services/api";
 // Create a new task
 const createTask = async (taskData) => {
-  const response = await fetch("http://localhost:5000/api/tasks/add", {
+  const response = await fetch(`${BASE_URL}/tasks/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
     body: JSON.stringify(taskData),
   });
 
@@ -17,8 +18,11 @@ const createTask = async (taskData) => {
 };
 
 // Get all tasks
-const getTasks = async () => {
-  const response = await fetch("http://localhost:5000/api/tasks");
+export const getTasks = async () => {
+  const response = await fetch(`${BASE_URL}/tasks`, {
+    method: "GET",
+    credentials: "include",
+  });
 
   if (!response.ok) {
     throw new Error("Failed to fetch tasks");
@@ -29,8 +33,9 @@ const getTasks = async () => {
 
 // Update a task
 const updateTask = async (taskId, updatedData) => {
-  const response = await fetch(`http://localhost:5000/api/tasks/update/${taskId}`, {
+  const response = await fetch(`${BASE_URL}/tasks/update/${taskId}`, {
     method: "PUT",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -46,8 +51,9 @@ const updateTask = async (taskId, updatedData) => {
 
 // Delete a task
 const deleteTask = async (taskId) => {
-  const response = await fetch(`http://localhost:5000/api/tasks/delete/${taskId}`, {
+  const response = await fetch(`${BASE_URL}/tasks/delete/${taskId}`, {
     method: "DELETE",
+    credentials: "include",
   });
 
   if (!response.ok) {

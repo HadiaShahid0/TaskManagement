@@ -3,11 +3,26 @@ import connectDB from "../config/DB.js";
 import dotenv from "dotenv";
 import cors from "cors";
 import routes from "./routes/index.js";
+import cookieParser from "cookie-parser";
+import path from "path";
+
+
+
 dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use("/uploads", express.static(path.join(process.cwd(), "src/uploads")));
+
+app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true, //allow to send and receive cookies from backend
+  }),
+);
+
 app.use(express.json());
 
 console.log(process.env.MONGO_URI);

@@ -1,4 +1,4 @@
-import TaskRoutes from "./routes/taskRoutes.jsx";
+import TaskRoutes from "./routes/appRoutes.jsx";
 
 const App = () => {
   return (
