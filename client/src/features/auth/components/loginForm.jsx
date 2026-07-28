@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/authServices";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const LoginForm = () => {
   });
 
   const [message, setMessage] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   // Handle Input Change
   const handleChange = (e) => {
     setFormData({
@@ -62,18 +63,24 @@ const LoginForm = () => {
                     required
                   />
                 </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Password</label>
-
+                <label className="form-label">Password</label>
+                <div className="input-group mb-3">
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     className="form-control"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     required
                   />
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                  </button>
                 </div>
 
                 <button className="btn btn-success w-100">Login</button>
