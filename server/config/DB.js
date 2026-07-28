@@ -1,8 +1,10 @@
 import mongoose from 'mongoose'
+import createAdmin from "../src/utils/createAdmin.js";
 
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
+    await createAdmin();
     console.log('MongoDB connected');
   } catch (err) {
     console.error('MongoDB connection error:', err.message);

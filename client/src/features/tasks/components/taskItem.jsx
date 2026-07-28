@@ -17,7 +17,7 @@ const TaskItem = ({ task, onEdit, onDelete, showActions = true }) => {
 
           <button
             className="btn btn-danger btn-sm"
-            onClick={() => onDelete(task.id)}
+            onClick={() => onDelete(task._id)}
           >
             <FiTrash2/>
           </button>

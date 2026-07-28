@@ -1,30 +1,33 @@
 import express from "express";
 import ToDoController from "../controllers/todoController/todoController.js";
 import validateTask from "../middleware/todoValidation/validateToDoTask.js";
-console.log("Todo routes loaded");
+import protect from "../middleware/authMiddleware/authMiddleware.js"
+
 const todoRoutes = express.Router();
-todoRoutes.get("/test", (req, res) => {
-    res.send("Todo route working");
-});
+
 
 todoRoutes.post(
     "/add",
+    protect,
     validateTask.validateTodoCreateTask,
     ToDoController.addTodoTask
 );
 
 todoRoutes.get(
     "/",
+    protect,
     ToDoController.readTodoTasks
 );
 
 todoRoutes.delete(
     "/:id",
+    protect,
     ToDoController.deleteTodoTask
 );
 
 todoRoutes.put(
     "/:id",
+    protect,
     validateTask.validateTodoUpdateTask,
     ToDoController.updateTodoTask
 );

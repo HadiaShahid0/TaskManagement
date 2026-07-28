@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+
+
 const TaskFormContent = ({ onAdd, editingTask, onUpdate }) => {
+
   const [title, setTitle] = useState(editingTask?.title ?? "");
-  const [description, setDescription] = useState(
-    editingTask?.description ?? "",
-  );
+  const [description, setDescription] = useState(editingTask?.description ?? "",);
   const [status, setStatus] = useState(editingTask?.status ?? false);
+  
   useEffect(() => {
     if (editingTask) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -40,7 +42,7 @@ const TaskFormContent = ({ onAdd, editingTask, onUpdate }) => {
     if (editingTask) {
       onUpdate({
         ...taskData,
-        id: editingTask.id,
+        _id: editingTask._id,
       });
     } else {
       onAdd(taskData);
@@ -65,7 +67,6 @@ const TaskFormContent = ({ onAdd, editingTask, onUpdate }) => {
 
         <textarea
           className="form-control mb-2"
-          type="text"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Enter task description"
@@ -92,10 +93,11 @@ const TaskFormContent = ({ onAdd, editingTask, onUpdate }) => {
   );
 };
 
+
 const TaskForm = ({ onAdd, editingTask, onUpdate }) => {
   return (
     <TaskFormContent
-      key={editingTask ? editingTask.id : "new"}
+      key={editingTask ? editingTask._id : "new"}
       onAdd={onAdd}
       editingTask={editingTask}
       onUpdate={onUpdate}
