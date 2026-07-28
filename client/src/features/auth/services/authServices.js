@@ -6,14 +6,14 @@ export const register = async (userData) => {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: "include", //tells the broswer to save cookies from the server and send cookies with future req
+    credentials: "include",
     body: JSON.stringify(userData),
   });
 
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message);
+    throw data;   // <-- important
   }
 
   return data;

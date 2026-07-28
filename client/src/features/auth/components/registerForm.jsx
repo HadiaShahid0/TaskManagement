@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { register } from "../services/authServices";
-
+import { FiEye, FiEyeOff } from "react-icons/fi";
 const RegisterForm = () => {
   const navigate = useNavigate();
 
@@ -10,9 +10,9 @@ const RegisterForm = () => {
     email: "",
     password: "",
   });
-
+  const [passwordErrors, setPasswordErrors] = useState([]);
   const [message, setMessage] = useState("");
-
+  const [showPassword, setShowPassword] = useState(false);
   // Handle Input Change
   const handleChange = (e) => {
     setFormData({
@@ -26,6 +26,7 @@ const RegisterForm = () => {
     e.preventDefault();
 
     setMessage("");
+    setPasswordErrors([]);
 
     try {
       const data = await register(formData);
@@ -36,7 +37,13 @@ const RegisterForm = () => {
         navigate("/login");
       }, 1500);
     } catch (error) {
-      setMessage(error.message);
+      console.log(error);
+
+      setMessage(error.message || "Registration failed");
+
+      if (error.errors) {
+        setPasswordErrors(error.errors);
+      }
     }
   };
 
@@ -48,7 +55,7 @@ const RegisterForm = () => {
             <div className="card-body">
               <h2 className="text-center mb-4">Register</h2>
 
-              {message && <div className="alert alert-info">{message}</div>}
+              {message && <div className="alert alert-danger">{message}</div>}
 
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -77,18 +84,34 @@ const RegisterForm = () => {
                   />
                 </div>
 
-                <div className="mb-3">
-                  <label className="form-label">Password</label>
-
+                <label className="form-label">Password</label>
+                <div className="input-group mb-3">
                   <input
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     className="form-control"
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
                     required
                   />
+
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FiEyeOff /> : <FiEye />}
+                  </button>
                 </div>
+                {passwordErrors.length > 0 && (
+                  <div className="alert alert-danger mt-2">
+                    <ul className="mb-0">
+                      {passwordErrors.map((error, index) => (
+                        <li key={index}>{error}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 <button className="btn btn-success w-100">Register</button>
                 <p>
