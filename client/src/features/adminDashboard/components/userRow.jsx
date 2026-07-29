@@ -35,8 +35,8 @@ const UserRow = ({ user, onSave }) => {
 
   return (
     <tr className={user.role === "admin" ? "table-secondary" : ""}>
-        <td>{user.name}</td>
-        <td>{user.email}</td>
+      <td>{user.name}</td>
+      <td>{user.email}</td>
       <td>
         <PermissionCheckbox
           checked={task}

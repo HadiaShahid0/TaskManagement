@@ -32,7 +32,7 @@ const LoginForm = () => {
       if (response.user.role === "admin") {
         navigate("/admin/users");
       } else {
-        navigate("/dashboard");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);

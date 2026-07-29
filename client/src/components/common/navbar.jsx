@@ -31,46 +31,54 @@ const Navbar = () => {
       console.log(error.message);
     }
   };
-
+  const hasAllPermissions = user?.permissions?.task && user?.permissions?.todo;
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow">
       <div className="container">
-
-        <Link className="navbar-brand" to="/dashboard">
+        <Link className="navbar-brand" to="/">
           Task Management
         </Link>
-
-        <div className="navbar-nav me-auto">
-
-          <Link className="nav-link" to="/dashboard">
-            Dashboard
-          </Link>
-
-          {user?.permissions?.task && (
-            <Link className="nav-link" to="/tasks">
-              Tasks
-            </Link>
-          )}
-
-          {user?.permissions?.todo && (
-            <Link className="nav-link" to="/todo">
-              Todo
-            </Link>
-          )}
-
-          <Link className="nav-link" to="/profile">
-            Profile
-          </Link>
-
-        </div>
-
         <button
-          className="btn btn-danger"
-          onClick={handleLogout}
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#adminNavbar"
         >
-          Logout
+          <span className="navbar-toggler-icon"></span>
         </button>
+        <div className="collapse navbar-collapse" id="adminNavbar">
+          <div className="navbar-nav me-auto">
+            {(user?.permissions?.todo || user?.permissions?.task) && (
+              <Link className="nav-link" to="/">
+                Dashboard
+              </Link>
+            )}
+            {user && !hasAllPermissions && (
+              <Link className="nav-link" to="/Request">
+                Request
+              </Link>
+            )}
+            {user?.permissions?.task && (
+              <Link className="nav-link" to="/tasks">
+                Tasks
+              </Link>
+            )}
 
+            {user?.permissions?.todo && (
+              <Link className="nav-link" to="/todo">
+                Todo
+              </Link>
+            )}
+
+            <Link className="nav-link" to="/profile">
+              Profile
+            </Link>
+          </div>
+
+          <button className="btn btn-outline-light" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </div>
     </nav>
   );

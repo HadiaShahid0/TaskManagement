@@ -36,12 +36,13 @@ const AdminNavbar = () => {
                 Users
               </Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/request">
+                Request
+              </Link>
+            </li>
           </ul>
-
-          <button
-            className="btn btn-outline-light"
-            onClick={handleLogout}
-          >
+          <button className="btn btn-outline-light" onClick={handleLogout}>
             Logout
           </button>
         </div>

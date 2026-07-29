@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { verify } from "../features/auth/services/authServices";
-import StatsCard from "../features/userdashboard/components/card";
-import DashboardServices from "../features/userdashboard/services/dashboardServices";
-import Navbar from "../components/common/navbar";
-import Footer from "../components/common/footer";
-import TaskList from "../features/tasks/components/taskList";
-import TodoList from "../features/todo/components/todoList"
+import { verify } from "../../auth/services/authServices";
+import StatsCard from "../components/card";
+import DashboardServices from "../services/dashboardServices";
+import Navbar from "../../../components/common/navbar";
+import Footer from "../../../components/common/footer";
+import TaskList from "../../tasks/components/taskList";
+import TodoList from "../../todo/components/todoList"
 const Dashboard = () => {
   const { taskStats, tasks, todos, todoStats } = DashboardServices();
 
@@ -99,7 +99,7 @@ const Dashboard = () => {
             </div>
           </>
         )}
-
+      
       
 
       </div>
