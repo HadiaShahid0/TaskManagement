@@ -1,6 +1,6 @@
-import Navbar from "../components/common/navbar";
-import Footer from "../components/common/footer";
-import ProfileCard from "../features/profile/components/profileCard";
+import Navbar from "../../../components/common/navbar";
+import Footer from "../../../components/common/footer";
+import ProfileCard from "../components/profileCard";
 
 const Profile = () => {
   return (

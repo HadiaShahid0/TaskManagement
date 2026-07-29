@@ -7,8 +7,6 @@ const useAdmin = () => {
   const loadUsers = async () => {
     try {
       const data = await getUsers();
-      console.log("API Response:", data);
-
       setUsers(data.data || []);
     } catch (error) {
       console.log(error);

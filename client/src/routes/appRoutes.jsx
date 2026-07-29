@@ -1,12 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import Dashboard from "../pages/dashboard.jsx";
-import Tasks from "../pages/task.jsx";
-import Todo from "../pages/todo.jsx"
-import Login from "../pages/login.jsx";
-import Register from "../pages/register.jsx";
-import Profile from "../pages/profile.jsx";
+import Dashboard from "../features/userdashboard/pages/dashboard.jsx";
+import Tasks from "../features/tasks/pages/task.jsx";
+import Todo from "../features/todo/pages/todo.jsx";
+import Login from "../features/auth/pages/login.jsx";
+import Register from "../features/auth/pages/register.jsx";
+import Profile from "../features/profile/pages/profile.jsx";
 import ProtectedRoute from "./protectedRoute.jsx";
-import AdminDashboard from "../pages/adminDashboard.jsx";
+import AdminDashboard from "../features/adminDashboard/pages/adminDashboard.jsx";
+import Request from "../features/userdashboard/accessRequest/pages/request.jsx";
+import AdminRequest from "../features/adminDashboard/pages/request.jsx"
 const AppRoutes = () => {
   return (
     <Routes>
@@ -14,7 +16,7 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
 
       <Route
-        path="/dashboard"
+        path="/"
         element={
           <ProtectedRoute>
             <Dashboard />
@@ -31,6 +33,14 @@ const AppRoutes = () => {
         }
       />
 
+      <Route
+        path="/admin/request"
+        element={
+          <ProtectedRoute>
+            <AdminRequest/>
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="/tasks"
@@ -55,6 +65,15 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/request"
+        element={
+          <ProtectedRoute>
+            <Request />
           </ProtectedRoute>
         }
       />

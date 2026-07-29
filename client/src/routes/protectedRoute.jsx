@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { verify } from "../features/auth/services/authServices";
 
 const ProtectedRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const location = useLocation();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -12,10 +14,12 @@ const ProtectedRoute = ({ children }) => {
         const data = await verify();
 
         if (data.success) {
-          setIsAuthenticated(true);
+          setUser(data.user);
+        } else {
+          setUser(null);
         }
       } catch {
-        setIsAuthenticated(false);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -28,8 +32,27 @@ const ProtectedRoute = ({ children }) => {
     return <h3 className="text-center mt-5">Loading...</h3>;
   }
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (user.role === "admin") {
+    if (!location.pathname.startsWith("/admin")) {
+      return <Navigate to="/admin/users" replace />;
+    }
+
+    return children;
+  }
+
+  // Permission check for normal users
+  const hasPermission = user.permissions.task || user.permissions.todo;
+
+  if (!hasPermission && location.pathname !== "/request") {
+    return <Navigate to="/request" replace />;
+  }
+
+  if (hasPermission && location.pathname === "/request") {
+    return <Navigate to="/" replace />;
   }
 
   return children;
