@@ -18,17 +18,18 @@ const createTodo = async (TodoData) => {
 };
 
 // Get all todo
-export const getTodo = async () => {
-  const response = await fetch(`${BASE_URL}/todos`, {
-    method: "GET",
-    credentials: "include",
-  });
+export const getTodo = async (page = 1, limit = 1, status = "All") => {
+  const response = await fetch(
+    `${BASE_URL}/todos?page=${page}&limit=${limit}&status=${status}`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch todo");
   }
-
-console.log("API Response:", response);
   return response.json();
 };
 
@@ -52,7 +53,7 @@ const updateTodo = async (todoId, updatedData) => {
 
 // Delete a Todo
 const deleteTodo = async (todoId) => {
-   const response = await fetch(`${BASE_URL}/todos/${todoId}`, {
+  const response = await fetch(`${BASE_URL}/todos/${todoId}`, {
     method: "DELETE",
     credentials: "include",
   });

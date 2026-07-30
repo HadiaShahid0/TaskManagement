@@ -1,4 +1,8 @@
-import { registerUser, loginUser } from "../../services/authService.js";
+import {
+  registerUser,
+  loginUser,
+  changePasswordService,
+} from "../../services/authService.js";
 
 const register = async (req, res) => {
   try {
@@ -9,7 +13,6 @@ const register = async (req, res) => {
       message: "User Registered Successfully",
       user,
     });
-    
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -22,20 +25,51 @@ const login = async (req, res) => {
   try {
     const { token, user } = await loginUser(req.body);
 
-    // Store JWT in Cookie
+    // Always create the authentication cookie
     res.cookie("token", token, {
       httpOnly: true,
       secure: false,
       sameSite: "strict",
-      maxAge: 3600000, //1 hour in milli second
+      maxAge: 3600000,
     });
+
+    // Tell frontend to redirect to Change Password page
+    if (user.mustChangePassword) {
+      return res.status(200).json({
+        success: true,
+        mustChangePassword: true,
+        message: "Please change your password before continuing.",
+        user,
+      });
+    }
 
     res.status(200).json({
       success: true,
       message: "Login Successfully",
       user,
     });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
+const changePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    await changePasswordService(
+      req.user._id,
+      currentPassword,
+      newPassword
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Password changed successfully.",
+    });
   } catch (error) {
     res.status(400).json({
       success: false,
@@ -53,7 +87,6 @@ const logout = (req, res) => {
   });
 };
 
-
 const verify = (req, res) => {
   res.status(200).json({
     success: true,
@@ -61,5 +94,10 @@ const verify = (req, res) => {
   });
 };
 
-export { register, login, logout, verify};
-
+export {
+  register,
+  login,
+  changePassword,
+  logout,
+  verify,
+};

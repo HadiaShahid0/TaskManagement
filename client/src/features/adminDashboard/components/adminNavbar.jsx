@@ -36,13 +36,24 @@ const AdminNavbar = () => {
                 Users
               </Link>
             </li>
+
+            <li className="nav-item">
+              <Link className="nav-link" to="/admin/user-create">
+                Create User
+              </Link>
+            </li>
+
             <li className="nav-item">
               <Link className="nav-link" to="/admin/request">
-                Request
+                Requests
               </Link>
             </li>
           </ul>
-          <button className="btn btn-outline-light" onClick={handleLogout}>
+
+          <button
+            className="btn btn-outline-light"
+            onClick={handleLogout}
+          >
             Logout
           </button>
         </div>

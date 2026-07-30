@@ -32,10 +32,26 @@ const ProtectedRoute = ({ children }) => {
     return <h3 className="text-center mt-5">Loading...</h3>;
   }
 
+  // Not logged in
   if (!user) {
     return <Navigate to="/login" replace />;
   }
 
+  // Force password change
+  if (user.mustChangePassword) {
+    if (location.pathname !== "/change-password") {
+      return <Navigate to="/change-password" replace />;
+    }
+
+    return children;
+  }
+
+  // Prevent going back to change-password
+  if (location.pathname === "/change-password") {
+    return <Navigate to="/" replace />;
+  }
+
+  // Admin
   if (user.role === "admin") {
     if (!location.pathname.startsWith("/admin")) {
       return <Navigate to="/admin/users" replace />;
@@ -44,8 +60,9 @@ const ProtectedRoute = ({ children }) => {
     return children;
   }
 
-  // Permission check for normal users
-  const hasPermission = user.permissions.task || user.permissions.todo;
+  // Normal user permission check
+  const hasPermission =
+    user.permissions?.task || user.permissions?.todo;
 
   if (!hasPermission && location.pathname !== "/request") {
     return <Navigate to="/request" replace />;

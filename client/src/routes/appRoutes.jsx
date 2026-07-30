@@ -8,7 +8,9 @@ import Profile from "../features/profile/pages/profile.jsx";
 import ProtectedRoute from "./protectedRoute.jsx";
 import AdminDashboard from "../features/adminDashboard/pages/adminDashboard.jsx";
 import Request from "../features/userdashboard/accessRequest/pages/request.jsx";
-import AdminRequest from "../features/adminDashboard/pages/request.jsx"
+import AdminRequest from "../features/adminDashboard/pages/request.jsx";
+import ChangePassword from "../features/adminDashboard/pages/userCreate.jsx";
+import UserCreate from "../features/adminDashboard/pages/userCreate.jsx";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -37,11 +39,19 @@ const AppRoutes = () => {
         path="/admin/request"
         element={
           <ProtectedRoute>
-            <AdminRequest/>
+            <AdminRequest />
           </ProtectedRoute>
         }
       />
 
+      <Route
+        path="/user-create"
+        element={
+          <ProtectedRoute>
+            <UserCreate />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/tasks"
         element={
@@ -50,7 +60,14 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
-
+      <Route
+        path="/change-password"
+        element={
+          <ProtectedRoute>
+            <ChangePassword />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/todo"
         element={

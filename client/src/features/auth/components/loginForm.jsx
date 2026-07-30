@@ -13,6 +13,7 @@ const LoginForm = () => {
 
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
   // Handle Input Change
   const handleChange = (e) => {
     setFormData({
@@ -21,22 +22,31 @@ const LoginForm = () => {
     });
   };
 
-  // Handle Form Submit
+  // Handle Login
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
+      setMessage("");
+
       const response = await login(formData);
 
-      // Decide where to go after login
+      // User created by admin must change password
+      if (response.mustChangePassword) {
+        navigate("/change-password");
+        return;
+      }
+
+      // Admin
       if (response.user.role === "admin") {
         navigate("/admin/users");
-      } else {
-        navigate("/");
+      }
+      // Normal User
+      else {
+        navigate("/dashboard");
       }
     } catch (error) {
-      console.log(error);
-      setMessage(error.response?.data?.message || "Login failed");
+      setMessage(error.message);
     }
   };
 
@@ -48,7 +58,11 @@ const LoginForm = () => {
             <div className="card-body">
               <h2 className="text-center mb-4">Login</h2>
 
-              {message && <div className="alert alert-info">{message}</div>}
+              {message && (
+                <div className="alert alert-danger">
+                  {message}
+                </div>
+              )}
 
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -63,28 +77,35 @@ const LoginForm = () => {
                     required
                   />
                 </div>
-                <label className="form-label">Password</label>
-                <div className="input-group mb-3">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    className="form-control"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                  />
 
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <FiEyeOff /> : <FiEye />}
-                  </button>
+                <div className="mb-3">
+                  <label className="form-label">Password</label>
+
+                  <div className="input-group">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      className="form-control"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                    />
+
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? <FiEyeOff /> : <FiEye />}
+                    </button>
+                  </div>
                 </div>
 
-                <button className="btn btn-success w-100">Login</button>
-                <p>
+                <button type="submit" className="btn btn-success w-100">
+                  Login
+                </button>
+
+                <p className="mt-3 text-center">
                   Don't have an account?{" "}
                   <Link to="/register">Register Here</Link>
                 </p>

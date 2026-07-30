@@ -21,10 +21,13 @@ export const createAccessRequest = async (module) => {
 };
 
 // Get logged-in user's requests
-export const getMyRequests = async () => {
-  const response = await fetch(`${BASE_URL}/access-request/my`, {
-    credentials: "include",
-  });
+export const getMyRequests = async (page = 1, limit = 5) => {
+  const response = await fetch(
+    `${BASE_URL}/access-request/my?page=${page}&limit=${limit}`,
+    {
+      credentials: "include",
+    }
+  );
 
   const data = await response.json();
 

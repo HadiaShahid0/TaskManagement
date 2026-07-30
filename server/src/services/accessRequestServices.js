@@ -25,17 +25,51 @@ export const createAccessRequestService = async (userId, module) => {
   });
 };
 
-export const getMyRequestsService = async (userId) => {
-  return await AccessRequest.find({ user: userId }).sort({
-    createdAt: -1, // Newest added request
+export const getMyRequestsService = async (
+  userId,
+  page = 1,
+  limit = 5
+) => {
+  const skip = (page - 1) * limit;
+
+  const totalRequests = await AccessRequest.countDocuments({
+    user: userId,
   });
+
+  const requests = await AccessRequest.find({ user: userId })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  return {
+    requests,
+    currentPage: page,
+    totalPages: Math.ceil(totalRequests / limit),
+    totalRequests,
+  };
 };
 
-export const getAllRequestsService = async () => {
-  return await AccessRequest.find()
-    .populate("user", "name email")  //Mongodb method
-    .sort({ createdAt: -1 });  // Newest added request
-}; 
+export const getAllRequestsService = async (
+  page = 1,
+  limit = 5
+) => {
+  const skip = (page - 1) * limit;
+
+  const totalRequests = await AccessRequest.countDocuments();
+
+  const requests = await AccessRequest.find()
+    .populate("user", "name email")
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  return {
+    requests,
+    currentPage: page,
+    totalPages: Math.ceil(totalRequests / limit),
+    totalRequests,
+  };
+};
 
 export const acceptRequestService = async (requestId) => {
   const request = await findPendingRequest(requestId);

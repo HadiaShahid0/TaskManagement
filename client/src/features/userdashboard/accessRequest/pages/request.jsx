@@ -8,13 +8,16 @@ import Footer from "../../../../components/common/footer";
 const Request = () => {
   const [user, setUser] = useState(null);
   const [requests, setRequests] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const loadRequests = async () => {
+  const loadRequests = async (currentPage = 1) => {
     try {
-      const response = await getMyRequests();
+      const response = await getMyRequests(currentPage);
 
       if (response.success) {
-        setRequests(response.data);
+        setRequests(response.data.requests);
+        setTotalPages(response.data.totalPages);
       }
     } catch (error) {
       console.log(error);
@@ -30,14 +33,14 @@ const Request = () => {
           setUser(response.user);
         }
 
-        await loadRequests();
+        await loadRequests(page);
       } catch (error) {
         console.log(error);
       }
     };
 
     loadData();
-  }, []);
+  }, [page]);
 
   const hasAllPermissions = user?.permissions?.task && user?.permissions?.todo;
 
@@ -88,7 +91,7 @@ const Request = () => {
               <tbody>
                 {requests.map((request, index) => (
                   <tr key={request._id}>
-                    <td>{index + 1}</td>
+                    <td>{(page - 1) * 5 + index + 1}</td>
 
                     <td className="text-capitalize">{request.module}</td>
 
@@ -111,6 +114,29 @@ const Request = () => {
                 ))}
               </tbody>
             </table>
+            {totalPages > 1 && (
+              <div className="d-flex justify-content-center align-items-center gap-3 mt-4">
+                <button
+                  className="btn btn-outline-primary"
+                  disabled={page === 1}
+                  onClick={() => setPage(page - 1)}
+                >
+                  Previous
+                </button>
+
+                <span>
+                  Page {page} of {totalPages}
+                </span>
+
+                <button
+                  className="btn btn-outline-primary"
+                  disabled={page === totalPages}
+                  onClick={() => setPage(page + 1)}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </>
         )}
       </div>

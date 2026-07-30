@@ -1,5 +1,6 @@
 import BASE_URL from "../../../services/api";
 
+// Register
 export const register = async (userData) => {
   const response = await fetch(`${BASE_URL}/auth/register`, {
     method: "POST",
@@ -13,12 +14,13 @@ export const register = async (userData) => {
   const data = await response.json();
 
   if (!response.ok) {
-    throw data;   // <-- important
+    throw new Error(data.message);
   }
 
   return data;
 };
 
+// Login
 export const login = async (userData) => {
   const response = await fetch(`${BASE_URL}/auth/login`, {
     method: "POST",
@@ -38,6 +40,7 @@ export const login = async (userData) => {
   return data;
 };
 
+// Logout
 export const logout = async () => {
   const response = await fetch(`${BASE_URL}/auth/logout`, {
     method: "POST",
@@ -53,11 +56,38 @@ export const logout = async () => {
   return data;
 };
 
+// Change Password
+export const changePassword = async (passwordData) => {
+  const response = await fetch(`${BASE_URL}/auth/change-password`, {
+    method: "PATCH",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(passwordData),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
+};
+
+// Verify Logged-in User
 export const verify = async () => {
   const response = await fetch(`${BASE_URL}/auth/verify`, {
     method: "GET",
     credentials: "include",
   });
 
-  return await response.json();
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message);
+  }
+
+  return data;
 };

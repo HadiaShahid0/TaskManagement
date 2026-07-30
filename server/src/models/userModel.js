@@ -18,7 +18,6 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
-      
     },
 
     profileImage: {
@@ -42,6 +41,11 @@ const userSchema = new mongoose.Schema(
         type: Boolean,
         default: false,
       },
+    },
+    
+    mustChangePassword: {
+      type: Boolean,
+      default: true,
     },
   },
   {

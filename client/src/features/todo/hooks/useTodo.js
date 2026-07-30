@@ -1,28 +1,38 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TodoApi from "../services/todoApi";
 
-const useTodo = () => {
+const useTodo = (statusFilter) => {
   const [todos, setTodos] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    const fetchTodo = async () => {
+  const fetchTodo = useCallback(
+    async (currentPage = 1) => {
       try {
-        const response = await TodoApi.getTodo();
+        const response = await TodoApi.getTodo(
+          currentPage,
+          1,
+          statusFilter
+        );
 
-        setTodos(Array.isArray(response.data) ? response.data : []);
+        setTodos(response.data.todos);
+        setTotalPages(response.data.totalPages);
       } catch (error) {
         console.error("Error fetching Todo:", error);
       }
-    };
+    },
+    [statusFilter]
+  );
 
-    fetchTodo();
-  }, []);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchTodo(page);
+  }, [page, statusFilter, fetchTodo]);
 
   const addTodo = async (todoData) => {
     try {
-      const newTodo = await TodoApi.createTodo(todoData);
-
-      setTodos((prevTodos) => [...prevTodos, newTodo.data]);
+      await TodoApi.createTodo(todoData);
+      fetchTodo(page);
     } catch (error) {
       console.error("Error adding Todo:", error);
     }
@@ -30,13 +40,8 @@ const useTodo = () => {
 
   const updateTodoById = async (todoId, updatedData) => {
     try {
-      const updatedTodo = await TodoApi.updateTodo(todoId, updatedData);
-
-      setTodos((prevTodos) =>
-        prevTodos.map((todo) =>
-          todo._id === todoId ? updatedTodo.data : todo
-        )
-      );
+      await TodoApi.updateTodo(todoId, updatedData);
+      fetchTodo(page);
     } catch (error) {
       console.error("Error updating Todo:", error);
     }
@@ -46,9 +51,11 @@ const useTodo = () => {
     try {
       await TodoApi.deleteTodo(todoId);
 
-      setTodos((prevTodos) =>
-        prevTodos.filter((todo) => todo._id !== todoId)
-      );
+      if (todos.length === 1 && page > 1) {
+        setPage((prevPage) => prevPage - 1);
+      } else {
+        fetchTodo(page);
+      }
     } catch (error) {
       console.error("Error deleting Todo:", error);
     }
@@ -56,6 +63,9 @@ const useTodo = () => {
 
   return {
     todos,
+    page,
+    setPage,
+    totalPages,
     addTodo,
     updateTodoById,
     deleteTodoById,
