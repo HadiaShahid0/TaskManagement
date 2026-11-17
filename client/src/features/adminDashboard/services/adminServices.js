@@ -1,7 +1,7 @@
 import BASE_URL from "../../../services/api";
 
 export const createUser = async (userData) => {
-  const response = await fetch(`${BASE_URL}/admin/users`, {
+  const response = await fetch(`${BASE_URL}/admin/create-user`, {
     method: "POST",
     credentials: "include",
     headers: {

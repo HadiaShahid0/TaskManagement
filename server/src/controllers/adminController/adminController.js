@@ -16,7 +16,7 @@ export const createUser = async (req, res) => {
     });
     res.status(200).json({
       success: true,
-      data: users,
+      data: user,
     });
   } catch (error) {
     res.status(500).json({
@@ -43,11 +43,16 @@ export const getAllUsers = async (req, res) => {
 
 export const updatePermissions = async (req, res) => {
   try {
-    const { task, todo } = req.body;
+    const permissions = req.body;
 
-    const user = await updatePermissionsService(req.params.id, {
-      task,
-      todo,
+    const user = await updatePermissionsService(req.params.id, permissions);
+
+    // Get io instance
+    const io = req.app.get("io");
+
+    // Notify the updated user
+    io.to(user._id.toString()).emit("permissionUpdated", {
+      permissions: user.permissions,
     });
 
     res.status(200).json({
@@ -55,6 +60,8 @@ export const updatePermissions = async (req, res) => {
       data: user,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(500).json({
       success: false,
       message: error.message,

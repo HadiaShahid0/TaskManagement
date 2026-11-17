@@ -9,7 +9,7 @@ import ProtectedRoute from "./protectedRoute.jsx";
 import AdminDashboard from "../features/adminDashboard/pages/adminDashboard.jsx";
 import Request from "../features/userdashboard/accessRequest/pages/request.jsx";
 import AdminRequest from "../features/adminDashboard/pages/request.jsx";
-import ChangePassword from "../features/adminDashboard/pages/userCreate.jsx";
+import ChangePassword from "../features/auth/pages/changePassword.jsx";
 import UserCreate from "../features/adminDashboard/pages/userCreate.jsx";
 const AppRoutes = () => {
   return (
@@ -45,7 +45,7 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/user-create"
+        path="/admin/user-create"
         element={
           <ProtectedRoute>
             <UserCreate />

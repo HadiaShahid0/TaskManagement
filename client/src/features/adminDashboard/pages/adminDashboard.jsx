@@ -5,6 +5,7 @@ import useAdmin from "../hooks/useAdmin";
 
 const AdminDashboard = () => {
   const { users, savePermissions } = useAdmin();
+  
   return (
     <>
       <AdminNavbar />

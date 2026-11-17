@@ -1,13 +1,28 @@
 import { acceptRequest, rejectRequest } from "../services/accessRequestService";
+import { useEffect } from "react";
+import socket from "../../../../services/socket";
 
 const AdminRequestTable = ({ requests, loadRequests, page }) => {
-  const handleAccept = async (id) => {
+  useEffect(() => {
+    const handleNewRequest = async () => {
+      await loadRequests();
+    };
+
+    socket.on("newRequest", handleNewRequest);
+
+    return () => {
+      socket.off("newRequest", handleNewRequest);
+    };
+  }, [loadRequests]);
+  
+  const handleAccept = async (requestId) => {
     try {
-      const response = await acceptRequest(id);
+      await acceptRequest(requestId);
 
-      alert(response.message);
+      // Refresh requests
+      await loadRequests();
 
-      loadRequests(page);
+      alert("Request accepted successfully.");
     } catch (error) {
       alert(error.message);
     }
@@ -24,6 +39,7 @@ const AdminRequestTable = ({ requests, loadRequests, page }) => {
       alert(error.message);
     }
   };
+  
 
   return (
     <table className="table table-bordered table-hover mt-4 table-sm">
@@ -40,53 +56,55 @@ const AdminRequestTable = ({ requests, loadRequests, page }) => {
       </thead>
 
       <tbody>
-        {requests.map((request, index) => (
-          <tr key={request._id}>
-            <td>{(page - 1) * 5 + index + 1}</td>
+        {requests
+          .filter((request) => request.user)
+          .map((request, index) => (
+            <tr key={request._id}>
+              <td>{(page - 1) * 5 + index + 1}</td>
 
-            <td>{request.user.name}</td>
-            <td>{request.user.email}</td>
-            <td className="text-capitalize">{request.module}</td>
+              <td>{request.user?.name || "User Deleted"}</td>
+              <td>{request.user?.email || "-"}</td>
+              <td className="text-capitalize">{request.module}</td>
 
-            <td>
-              <span
-                className={
-                  request.status === "Pending"
-                    ? "badge bg-warning text-dark"
-                    : request.status === "Accepted"
-                    ? "badge bg-success"
-                    : "badge bg-danger"
-                }
-              >
-                {request.status}
-              </span>
-            </td>
+              <td>
+                <span
+                  className={
+                    request.status === "Pending"
+                      ? "badge bg-warning text-dark"
+                      : request.status === "Accepted"
+                        ? "badge bg-success"
+                        : "badge bg-danger"
+                  }
+                >
+                  {request.status}
+                </span>
+              </td>
 
-            <td>{new Date(request.createdAt).toLocaleString()}</td>
+              <td>{new Date(request.createdAt).toLocaleString()}</td>
 
-            <td>
-              {request.status === "Pending" ? (
-                <>
-                  <button
-                    className="btn btn-success btn-sm me-2"
-                    onClick={() => handleAccept(request._id)}
-                  >
-                    Accept
-                  </button>
+              <td>
+                {request.status === "Pending" ? (
+                  <>
+                    <button
+                      className="btn btn-success btn-sm me-2"
+                      onClick={() => handleAccept(request._id)}
+                    >
+                      Accept
+                    </button>
 
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleReject(request._id)}
-                  >
-                    Reject
-                  </button>
-                </>
-              ) : (
-                "-"
-              )}
-            </td>
-          </tr>
-        ))}
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() => handleReject(request._id)}
+                    >
+                      Reject
+                    </button>
+                  </>
+                ) : (
+                  "-"
+                )}
+              </td>
+            </tr>
+          ))}
       </tbody>
     </table>
   );
