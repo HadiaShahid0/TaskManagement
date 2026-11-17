@@ -18,11 +18,14 @@ const createTask = async (taskData) => {
 };
 
 // Get all tasks
-export const getTasks = async () => {
-  const response = await fetch(`${BASE_URL}/tasks`, {
-    method: "GET",
-    credentials: "include",
-  });
+export const getTasks = async (page = 1, limit = 1, status = "All") => {
+  const response = await fetch(
+    `${BASE_URL}/tasks?page=${page}&limit=${limit}&status=${status}`,
+    {
+      method: "GET",
+      credentials: "include",
+    },
+  );
 
   if (!response.ok) {
     throw new Error("Failed to fetch tasks");

@@ -13,7 +13,6 @@ const addTask = async (req, res) => {
     });
 
     Response.successResponse(res, "Task added successfully", newTask);
-
   } catch (error) {
     Response.errorResponse(res, error.message);
   }
@@ -37,9 +36,18 @@ const deleteTask = async (req, res) => {
 
 const readTasks = async (req, res) => {
   try {
-    const tasks = await taskServices.getAllTasksService(req.user._id);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 1;
+    const status = req.query.status || "All";
 
-    Response.successResponse(res, "Tasks retrieved successfully", tasks);
+    const result = await taskServices.getAllTasksService(
+      req.user._id,
+      page,
+      limit,
+      status,
+    );
+
+    Response.successResponse(res, "Tasks retrieved successfully", result);
   } catch (error) {
     Response.errorResponse(res, error.message);
   }

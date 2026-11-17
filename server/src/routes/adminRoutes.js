@@ -4,10 +4,12 @@ import isAdmin from "../middleware/adminMiddleware/roleMiddleware.js";
 import {
   getAllUsers,
   updatePermissions,
+  createUser,
 } from "../controllers/adminController/adminController.js";
 
 const adminRoutes = express.Router();
 
+adminRoutes.post("/create-user", protect,isAdmin, createUser)
 // Get all users
 adminRoutes.get("/users", protect, isAdmin, getAllUsers);
 

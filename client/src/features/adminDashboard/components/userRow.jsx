@@ -52,6 +52,13 @@ const UserRow = ({ user, onSave }) => {
           disabled={isAdmin}
         />
       </td>
+      <td>
+        {user.mustChangePassword ? (
+          <span className="badge bg-warning text-dark">Pending</span>
+        ) : (
+          <span className="badge bg-success">Completed</span>
+        )}
+      </td>
     </tr>
   );
 };

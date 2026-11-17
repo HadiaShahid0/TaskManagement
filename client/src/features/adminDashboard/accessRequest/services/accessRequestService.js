@@ -1,9 +1,13 @@
 import BASE_URL from "../../../../services/api";
+
 // Get all requests (Admin)
-export const getAllRequests = async () => {
-  const response = await fetch(`${BASE_URL}/access-request`, {
-    credentials: "include",
-  });
+export const getAllRequests = async (page = 1, limit = 5) => {
+  const response = await fetch(
+    `${BASE_URL}/access-request?page=${page}&limit=${limit}`,
+    {
+      credentials: "include",
+    }
+  );
 
   const data = await response.json();
 

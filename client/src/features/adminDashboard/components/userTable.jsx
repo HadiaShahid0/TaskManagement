@@ -9,6 +9,7 @@ const UserTable = ({ users, savePermissions }) => {
           <th>Email</th>
           <th>Task</th>
           <th>Todo</th>
+           <th>First Login</th>
         </tr>
       </thead>
 

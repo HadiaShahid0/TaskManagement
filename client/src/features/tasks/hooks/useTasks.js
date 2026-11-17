@@ -1,25 +1,38 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import taskApi from "../services/taskApi";
 
-const useTasks = () => {
+const useTasks = (statusFilter) => {
   const [tasks, setTasks] = useState([]);
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await taskApi.getTasks();
-        setTasks(response.data);
-      } catch (error) {
-        console.error("Error fetching task:", error);
-      }
-    };
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-    fetchTasks();
-  }, []);
+  const fetchTasks = useCallback(
+    async (currentPage = 1) => {
+      try {
+        const response = await taskApi.getTasks(
+          currentPage,
+          1,
+          statusFilter
+        );
+
+        setTasks(response.data.tasks);
+        setTotalPages(response.data.totalPages);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    },
+    [statusFilter]
+  );
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchTasks(page);
+  }, [page, statusFilter, fetchTasks]);
 
   const addTask = async (taskData) => {
     try {
-      const newTask = await taskApi.createTask(taskData);
-      setTasks((prevTasks) => [...prevTasks, newTask.data]);
+      await taskApi.createTask(taskData);
+      fetchTasks(page);
     } catch (error) {
       console.error("Error adding task:", error);
     }
@@ -27,10 +40,8 @@ const useTasks = () => {
 
   const updateTaskById = async (taskId, updatedData) => {
     try {
-      const updatedTask = await taskApi.updateTask(taskId, updatedData);
-      setTasks((prevTasks) =>
-        prevTasks.map((task) => (task._id === taskId ? updatedTask.data : task)),
-      );
+      await taskApi.updateTask(taskId, updatedData);
+      fetchTasks(page);
     } catch (error) {
       console.error("Error updating task:", error);
     }
@@ -39,13 +50,26 @@ const useTasks = () => {
   const deleteTaskById = async (taskId) => {
     try {
       await taskApi.deleteTask(taskId);
-      setTasks((prevTasks) => prevTasks.filter((task) => task._id !== taskId));
+
+      if (tasks.length === 1 && page > 1) {
+        setPage((prevPage) => prevPage - 1);
+      } else {
+        fetchTasks(page);
+      }
     } catch (error) {
       console.error("Error deleting task:", error);
     }
   };
 
-  return { tasks, addTask, updateTaskById, deleteTaskById };
+  return {
+    tasks,
+    page,
+    setPage,
+    totalPages,
+    addTask,
+    updateTaskById,
+    deleteTaskById,
+  };
 };
 
 export default useTasks;

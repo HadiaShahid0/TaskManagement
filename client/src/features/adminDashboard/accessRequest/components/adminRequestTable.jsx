@@ -1,14 +1,13 @@
 import { acceptRequest, rejectRequest } from "../services/accessRequestService";
 
-const AdminRequestTable = ({ requests, loadRequests }) => {
-  
+const AdminRequestTable = ({ requests, loadRequests, page }) => {
   const handleAccept = async (id) => {
     try {
       const response = await acceptRequest(id);
 
       alert(response.message);
 
-      loadRequests();
+      loadRequests(page);
     } catch (error) {
       alert(error.message);
     }
@@ -20,7 +19,7 @@ const AdminRequestTable = ({ requests, loadRequests }) => {
 
       alert(response.message);
 
-      loadRequests();
+      loadRequests(page);
     } catch (error) {
       alert(error.message);
     }
@@ -43,7 +42,7 @@ const AdminRequestTable = ({ requests, loadRequests }) => {
       <tbody>
         {requests.map((request, index) => (
           <tr key={request._id}>
-            <td>{index + 1}</td>
+            <td>{(page - 1) * 5 + index + 1}</td>
 
             <td>{request.user.name}</td>
             <td>{request.user.email}</td>
@@ -55,8 +54,8 @@ const AdminRequestTable = ({ requests, loadRequests }) => {
                   request.status === "Pending"
                     ? "badge bg-warning text-dark"
                     : request.status === "Accepted"
-                      ? "badge bg-success"
-                      : "badge bg-danger"
+                    ? "badge bg-success"
+                    : "badge bg-danger"
                 }
               >
                 {request.status}

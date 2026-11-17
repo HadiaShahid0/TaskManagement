@@ -4,41 +4,31 @@ import TaskList from "../components/taskList.jsx";
 import useTasks from "../hooks/useTasks.js";
 import Navbar from "../../../components/common/navbar.jsx";
 import Footer from "../../../components/common/footer.jsx";
-const Tasks = () => {
-  const { tasks, addTask, deleteTaskById, updateTaskById } = useTasks();
 
+const Tasks = () => {
   const [editingTask, setEditingTask] = useState(null);
   const [statusFilter, setStatusFilter] = useState("All");
+  const {
+    tasks,
+    addTask,
+    deleteTaskById,
+    updateTaskById,
+    page,
+    setPage,
+    totalPages,
+  } = useTasks(statusFilter);
 
   const handleEdit = (task) => {
-    const edittask = {
+    setEditingTask({
       ...task,
       status: task.status.toString(),
-    };
-
-    setEditingTask(edittask);
+    });
   };
 
   const handleUpdate = (task) => {
     updateTaskById(task._id, task);
     setEditingTask(null);
   };
-
-  const filteredTasks = tasks.filter((task) => {
-    if (statusFilter === "All") {
-      return true;
-    }
-
-    if (statusFilter === "Completed") {
-      return task.status === true;
-    }
-
-    if (statusFilter === "Pending") {
-      return task.status === false;
-    }
-
-    return true;
-  });
 
   return (
     <>
@@ -53,12 +43,14 @@ const Tasks = () => {
           onUpdate={handleUpdate}
         />
 
-        {/* Filter Dropdown */}
         <div className="d-flex justify-content-end mb-3">
           <select
             className="form-select w-auto"
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setPage(1);
+            }}
           >
             <option value="All">All Tasks</option>
             <option value="Pending">Pending</option>
@@ -66,12 +58,31 @@ const Tasks = () => {
           </select>
         </div>
 
-        {/* Filtered Task List */}
-        <TaskList
-          tasks={filteredTasks}
-          onEdit={handleEdit}
-          onDelete={deleteTaskById}
-        />
+        <TaskList tasks={tasks} onEdit={handleEdit} onDelete={deleteTaskById} />
+
+        {totalPages > 1 && (
+          <div className="d-flex justify-content-center align-items-center gap-3 mt-4">
+            <button
+              className="btn btn-outline-primary"
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+            >
+              Previous
+            </button>
+
+            <span>
+              Page {page} of {totalPages}
+            </span>
+
+            <button
+              className="btn btn-outline-primary"
+              disabled={page === totalPages}
+              onClick={() => setPage(page + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
 
       <Footer />

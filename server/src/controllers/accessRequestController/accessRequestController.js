@@ -30,7 +30,14 @@ export const createAccessRequest = async (req, res) => {
 // Logged-in user's requests
 export const getMyRequests = async (req, res) => {
   try {
-    const requests = await getMyRequestsService(req.user._id);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 5;
+
+    const requests = await getMyRequestsService(
+      req.user._id,
+      page,
+      limit
+    );
 
     res.status(200).json({
       success: true,
@@ -47,7 +54,13 @@ export const getMyRequests = async (req, res) => {
 // Admin gets all requests
 export const getAllRequests = async (req, res) => {
   try {
-    const requests = await getAllRequestsService();
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 5;
+
+    const requests = await getAllRequestsService(
+      page,
+      limit
+    );
 
     res.status(200).json({
       success: true,
