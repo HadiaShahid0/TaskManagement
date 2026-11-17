@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../services/authServices";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-
+import socket from "../../../services/socket";
 const LoginForm = () => {
   const navigate = useNavigate();
 
@@ -14,7 +14,6 @@ const LoginForm = () => {
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // Handle Input Change
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -22,7 +21,6 @@ const LoginForm = () => {
     });
   };
 
-  // Handle Login
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -31,19 +29,12 @@ const LoginForm = () => {
 
       const response = await login(formData);
 
-      // User created by admin must change password
-      if (response.mustChangePassword) {
-        navigate("/change-password");
-        return;
-      }
+      socket.emit("join", response.user._id);
 
-      // Admin
       if (response.user.role === "admin") {
         navigate("/admin/users");
-      }
-      // Normal User
-      else {
-        navigate("/dashboard");
+      } else {
+        navigate("/");
       }
     } catch (error) {
       setMessage(error.message);
@@ -58,11 +49,7 @@ const LoginForm = () => {
             <div className="card-body">
               <h2 className="text-center mb-4">Login</h2>
 
-              {message && (
-                <div className="alert alert-danger">
-                  {message}
-                </div>
-              )}
+              {message && <div className="alert alert-danger">{message}</div>}
 
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">

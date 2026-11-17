@@ -32,20 +32,18 @@ const userSchema = new mongoose.Schema(
     },
 
     permissions: {
-      task: {
-        type: Boolean,
-        default: false,
-      },
-
-      todo: {
-        type: Boolean,
-        default: false,
-      },
+      type: [
+        {
+          type: String,
+          enum: ["task", "todo"],
+        },
+      ],
+      default: [],
     },
-    
-    mustChangePassword: {
+
+    createdByAdmin: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   {

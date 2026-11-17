@@ -55,7 +55,11 @@ const loginUser = async ({ email, password }) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      permissions: user.permissions,
+      permissions:
+        user.permissions.includes("task") || user.permissions.includes("todo")
+          ? user.permissions
+          : [],
+      createdByAdmin: user.createdByAdmin,
       mustChangePassword: user.mustChangePassword,
     },
   };

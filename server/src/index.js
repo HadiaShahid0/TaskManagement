@@ -1,38 +1,42 @@
 import express from "express";
-import connectDB from "../config/DB.js";
-import dotenv from "dotenv";
+import http from "http";
 import cors from "cors";
-import routes from "./routes/index.js";
 import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
 import path from "path";
 
-
+import connectDB from "../config/DB.js";
+import routes from "./routes/index.js";
+import { configureSocket } from "./utils/socketHelper.js";
 
 dotenv.config();
 
 const app = express();
 
-app.use("/uploads", express.static(path.join(process.cwd(), "src/uploads")));
+const server = http.createServer(app);
 
-app.use(cookieParser());
+const io = configureSocket(server);
+
+app.set("io", io);
 
 app.use(
   cors({
     origin: "http://localhost:5173",
-    credentials: true, //allow to send and receive cookies from backend
+    credentials: true,
   }),
 );
 
+app.use(cookieParser());
 app.use(express.json());
 
-console.log(process.env.MONGO_URI);
-
-const PORT = process.env.PORT || 5000;
+app.use("/uploads", express.static(path.join(process.cwd(), "src/uploads")));
 
 connectDB();
 
 routes(app);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+const PORT = process.env.PORT || 5000;
+
+server.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
 });

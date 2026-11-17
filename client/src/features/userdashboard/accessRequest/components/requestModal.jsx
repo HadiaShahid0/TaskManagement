@@ -9,9 +9,11 @@ const modules = [
 const RequestModuleModal = ({ permissions, onRequestSent }) => {
   const [module, setModule] = useState("");
 
-  const availableModules = modules.filter(
-    (item) => !permissions[item.value]
-  );
+  const userPermissions = permissions ?? [];
+
+const availableModules = modules.filter(
+  (item) => !userPermissions.includes(item.value)
+);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

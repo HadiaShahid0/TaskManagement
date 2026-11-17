@@ -26,6 +26,11 @@ const ProtectedRoute = ({ children }) => {
     };
 
     checkAuth();
+
+    // Refresh user every 5 seconds
+    const interval = setInterval(checkAuth, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -36,9 +41,7 @@ const ProtectedRoute = ({ children }) => {
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-
-  // Force password change
-  if (user.mustChangePassword) {
+  if (user.role !== "admin" && user.createdByAdmin && user.mustChangePassword) {
     if (location.pathname !== "/change-password") {
       return <Navigate to="/change-password" replace />;
     }
@@ -62,14 +65,10 @@ const ProtectedRoute = ({ children }) => {
 
   // Normal user permission check
   const hasPermission =
-    user.permissions?.task || user.permissions?.todo;
+    user.permissions?.includes("task") || user.permissions?.includes("todo");
 
   if (!hasPermission && location.pathname !== "/request") {
     return <Navigate to="/request" replace />;
-  }
-
-  if (hasPermission && location.pathname === "/request") {
-    return <Navigate to="/" replace />;
   }
 
   return children;

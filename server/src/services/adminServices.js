@@ -23,8 +23,9 @@ export const createUserService = async ({
     email,
     password: hashedPassword,
     role: role || "user",
-    permissions,
-    mustChangePassword: true,
+    permissions, 
+    createdByAdmin: true,   
+    mustChangePassword: true,  
   });
 
   return user;

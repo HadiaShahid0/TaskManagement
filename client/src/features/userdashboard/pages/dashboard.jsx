@@ -6,23 +6,47 @@ import DashboardServices from "../services/dashboardServices";
 import Navbar from "../../../components/common/navbar";
 import Footer from "../../../components/common/footer";
 import TaskList from "../../tasks/components/taskList";
-import TodoList from "../../todo/components/todoList"
+import TodoList from "../../todo/components/todoList";
+import socket from "../../../services/socket";
+
 const Dashboard = () => {
   const { taskStats, tasks, todos, todoStats } = DashboardServices();
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] =useState(null);
 
-  useEffect(() => {
-    const getUser = async () => {
+  const loadUser = async () => {
+    try {
       const response = await verify();
 
       if (response.success) {
-        setUser(response.user); // or response.data if you changed verify()
-      }
-    };
+        setUser(response.user);
 
-    getUser();
+        socket.emit("join", response.user._id);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };                 
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadUser();
   }, []);
+
+  useEffect(() => {
+    socket.on("permissionUpdated", async () => {
+      await loadUser();
+    });
+
+    return () => {
+      socket.off("permissionUpdated");
+    };
+  }, []);
+
+  const permissions = user?.permissions ?? [];
+
+  const hasTaskPermission = permissions.includes("task");
+  const hasTodoPermission = permissions.includes("todo");
 
   return (
     <>
@@ -30,44 +54,61 @@ const Dashboard = () => {
 
       <div className="container mt-4">
         <div className="row">
-
-          {user?.permissions?.task && (
+          {hasTaskPermission && (
             <>
               <div className="col-md-4 mb-3">
-                <StatsCard title="Total Tasks" value={taskStats.total} />
+                <StatsCard
+                  title="Total Tasks"
+                  value={taskStats.total}
+                />
               </div>
 
               <div className="col-md-4 mb-3">
-                <StatsCard title="Completed Tasks" value={taskStats.completed} />
+                <StatsCard
+                  title="Completed Tasks"
+                  value={taskStats.completed}
+                />
               </div>
 
               <div className="col-md-4 mb-3">
-                <StatsCard title="Pending Tasks" value={taskStats.pending} />
+                <StatsCard
+                  title="Pending Tasks"
+                  value={taskStats.pending}
+                />
               </div>
             </>
           )}
 
-          {user?.permissions?.todo && (
+          {hasTodoPermission && (
             <>
               <div className="col-md-4 mb-3">
-                <StatsCard title="Total Todos" value={todoStats.total} />
+                <StatsCard
+                  title="Total Todos"
+                  value={todoStats.total}
+                />
               </div>
 
               <div className="col-md-4 mb-3">
-                <StatsCard title="Completed Todos" value={todoStats.completed} />
+                <StatsCard
+                  title="Completed Todos"
+                  value={todoStats.completed}
+                />
               </div>
 
               <div className="col-md-4 mb-3">
-                <StatsCard title="Pending Todos" value={todoStats.pending} />
+                <StatsCard
+                  title="Pending Todos"
+                  value={todoStats.pending}
+                />
               </div>
             </>
           )}
-
         </div>
 
-        {user?.permissions?.task && (
+        {hasTaskPermission && (
           <>
-          <h5>Task List</h5>
+            <h5>Task List</h5>
+
             <TaskList
               tasks={tasks.slice(0, 5)}
               showActions={false}
@@ -84,10 +125,14 @@ const Dashboard = () => {
           </>
         )}
 
-        {user?.permissions?.todo && (
+        {hasTodoPermission && (
           <>
-          <h5>Todo List</h5>
-            <TodoList todos={todos.slice(0, 5)} showActions={false} />
+            <h5 className="mt-4">Todo List</h5>
+
+            <TodoList
+              todos={todos.slice(0, 5)}
+              showActions={false}
+            />
 
             <div className="d-flex justify-content-center">
               <Link
@@ -99,9 +144,6 @@ const Dashboard = () => {
             </div>
           </>
         )}
-      
-      
-
       </div>
 
       <Footer />

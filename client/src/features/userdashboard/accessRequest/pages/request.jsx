@@ -4,12 +4,26 @@ import RequestModuleModal from "../components/requestModal";
 import { getMyRequests } from "../services/accessRequestService";
 import Navbar from "../../../../components/common/navbar";
 import Footer from "../../../../components/common/footer";
-
+import socket from "../../../../services/socket";
 const Request = () => {
   const [user, setUser] = useState(null);
   const [requests, setRequests] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const loadUser = async () => {
+  try {
+    const response = await verify();
+
+    if (response.success) {
+      setUser(response.user);
+
+      socket.emit("join", response.user._id);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const loadRequests = async (currentPage = 1) => {
     try {
@@ -25,31 +39,47 @@ const Request = () => {
   };
 
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const response = await verify();
-
-        if (response.success) {
-          setUser(response.user);
-        }
-
-        await loadRequests(page);
-      } catch (error) {
-        console.log(error);
-      }
+    const loaduser = async () => {
+      await loadUser();
+      await loadRequests(page);
     };
 
-    loadData();
+    loaduser();
+
+    const interval = setInterval(() => {
+      loadUser();
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [page]);
 
-  const hasAllPermissions = user?.permissions?.task && user?.permissions?.todo;
+  useEffect(() => {
+    socket.on("permissionUpdated", async () => {
+      await loadUser();
+      await loadRequests(page);
+    });
 
+    socket.on("requestUpdated", async () => {
+      await loadRequests(page);
+    });
+
+    return () => {
+      socket.off("permissionUpdated");
+      socket.off("requestUpdated");
+    };
+  }, [page]);
+
+  const permissions = user?.permissions ?? [];
+
+  const availableModules = ["task", "todo"].filter(
+    (module) => !permissions.includes(module),
+  );
   return (
     <>
       <Navbar />
 
       <div className="container mt-4">
-        {user && !hasAllPermissions && (
+        {user && availableModules.length > 0 && (
           <div className="d-flex justify-content-end mb-3">
             <button
               className="btn btn-outline-success"
@@ -68,11 +98,13 @@ const Request = () => {
           />
         )}
 
-        {user && !user.permissions.task && !user.permissions.todo && (
-          <div className="alert alert-warning text-center">
-            <h5>You don't have access to any modules.</h5>
-          </div>
-        )}
+        {user &&
+          !permissions.includes("task") &&
+          !permissions.includes("todo") && (
+            <div className="alert alert-warning text-center">
+              <h5>You don't have access to any modules.</h5>
+            </div>
+          )}
 
         {requests.length > 0 && (
           <>

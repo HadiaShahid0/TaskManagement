@@ -84,7 +84,7 @@ export const verify = async () => {
   });
 
   const data = await response.json();
-
+  console.log("Verify response:", data);
   if (!response.ok) {
     throw new Error(data.message);
   }

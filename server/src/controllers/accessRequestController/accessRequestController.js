@@ -79,6 +79,11 @@ export const acceptRequest = async (req, res) => {
   try {
     const request = await acceptRequestService(req.params.id);
 
+    const io = req.app.get("io");
+    io.to(request.user.toString()).emit("permissionUpdated", {
+      permissions: request.permissions,
+    });
+    
     res.status(200).json({
       success: true,
       message: "Request accepted successfully.",
